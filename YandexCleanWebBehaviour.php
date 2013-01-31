@@ -9,30 +9,30 @@
  *
  *   $model = new SomeModel();
  *   $model->attachBehavior('antiSpam', array(
- *       'class' => 'AntiSpamBehaviour',
+ *       'class' => 'YandexCleanWebBehaviour',
  *       'apiKey' => '{ключ}',
  *   ));
  *
  *   if (isset($_POST['SomeModel'])) {
  *      $model->attributes = $_POST['SomeModel'];
- *      $model->antiSpamValues = array(
+ *      $model->cleanWebValues = array(
  *         'body' => $model->text,
  *      );
  *      $model->validate();
  *   }
  *   else {
- *      $model->initAntiSpam();
+ *      $model->initCleanWeb();
  *   }
  *
- * В представлении проверять необходимость отображения CAPTCHA с помощью ($model->getCaptcha() == null).
+ * В представлении проверять необходимость отображения CAPTCHA с помощью $model->getIsCaptchaRequired().
  * Отображение CAPTCHA:
  *
- * <img src="<?= $model->getCaptcha() ?>" alt="Защита от спама" width="200" height="60" />
+ * <img src="<?php echo $model->getCaptchaUrl(); ?>" alt="Защита от спама" width="200" height="60" />
  *
  * @copyright  Copyright (c) 2013 Kuponator.ru
- * @author     Yaroslav Usatikov <ys@kuponator.ru>
+ * @author     Yaroslav Usatikov <yaroslav@usatikov.com>
  */
-class AntiSpamBehaviour extends CModelBehavior
+class YandexCleanWebBehaviour extends CModelBehavior
 {
     /** @var string API-ключ. Можно получить на {@link http://api.yandex.ru/cleanweb/form.xml} */
     public $apiKey;
@@ -71,9 +71,19 @@ class AntiSpamBehaviour extends CModelBehavior
      *
      * @return string|null URL изображения CAPTCHA или null, если ввод кода не требуется
      */
-    public function getCaptcha()
+    public function getCaptchaUrl()
     {
         return $this->_captchaUrl;
+    }
+
+    /**
+     * Требуется ли ввод кода с изображения CAPTCHA
+     * 
+     * @return bool 
+     */
+    public function getIsCaptchaRequired()
+    {
+        return ($this->_captchaUrl != null);
     }
 
     /**
@@ -90,7 +100,7 @@ class AntiSpamBehaviour extends CModelBehavior
      *
      * @param array $values
      */
-    public function setAntiSpamValues(array $values)
+    public function setCleanWebValues(array $values)
     {
         $this->_values = $values;
     }
@@ -108,9 +118,9 @@ class AntiSpamBehaviour extends CModelBehavior
 
         $session = Yii::app()->session;
 
-        if ($session->contains('antispam_msg_id') && $session->contains('antispam_captcha_id')) {
+        if ($session->contains('cleanweb_msg_id') && $session->contains('cleanweb_captcha_id')) {
             if ($this->_captchaCheck() == false) {
-                $this->_captchaInit($session->get('antispam_msg_id'));
+                $this->_captchaInit($session->get('cleanweb_msg_id'));
                 $this->owner->addError('captcha', $this->captchaMsg);
             }
 
@@ -142,7 +152,7 @@ class AntiSpamBehaviour extends CModelBehavior
      * Инициализация сессии.
      * Этот метод должен быть вызван из контроллера перед отображением формы.
      */
-    public function initAntiSpam()
+    public function initCleanWeb()
     {
         $this->_cleanSession();
 
@@ -209,8 +219,8 @@ class AntiSpamBehaviour extends CModelBehavior
         }
 
         $response = $this->_makeRequest('check-captcha', array(
-            'id' => $session->get('antispam_msg_id'),
-            'captcha' => $session->get('antispam_captcha_id'),
+            'id' => $session->get('cleanweb_msg_id'),
+            'captcha' => $session->get('cleanweb_captcha_id'),
             'value' => $value,
         ));
 
@@ -255,8 +265,8 @@ class AntiSpamBehaviour extends CModelBehavior
         curl_close($ch);
 
         $session = Yii::app()->session;
-        $session->add('antispam_msg_id', (string)$msgId);
-        $session->add('antispam_captcha_id', (string)$captchaResponse->captcha);
+        $session->add('cleanweb_msg_id', (string)$msgId);
+        $session->add('cleanweb_captcha_id', (string)$captchaResponse->captcha);
 
         $this->_captchaUrl = (string)$captchaResponse->url;
     }
@@ -305,8 +315,8 @@ class AntiSpamBehaviour extends CModelBehavior
     private function _cleanSession()
     {
         $session = Yii::app()->session;
-        $session->remove('antispam_msg_id');
-        $session->remove('antispam_captcha_id');
+        $session->remove('cleanweb_msg_id');
+        $session->remove('cleanweb_captcha_id');
     }
 
 }

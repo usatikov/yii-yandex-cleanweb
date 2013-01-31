@@ -3,7 +3,7 @@
  * Пример представления, в котором к модели добавляется поведение для защиты от спама.
  *
  * @copyright  Copyright (c) 2013 Kuponator.ru
- * @author     Yaroslav Usatikov <ys@kuponator.ru>
+ * @author     Yaroslav Usatikov <yaroslav@usatikov.com>
  */
 ?>
 <div class="form" style="margin: 60px">
@@ -29,10 +29,10 @@
         <?php echo $form->error($model, 'text'); ?>
     </div>
 
-    <?php if ($model->getCaptcha()) : ?>
+    <?php if ($model->isCaptchaRequired) : ?>
 
     <div class="row">
-        <img src="<?php echo $model->getCaptcha(); ?>" alt="Защита от спама" width="200" height="60" />
+        <img src="<?php echo $model->captchaUrl; ?>" alt="Защита от спама" width="200" height="60" />
         <?php echo $form->labelEx($model, 'captcha'); ?>
         <?php echo $form->textField($model, 'captcha', array('size' => 60, 'maxlength' => 255)); ?>
         <?php echo $form->error($model, 'captcha'); ?>

@@ -3,7 +3,7 @@
  * Пример модели, к которой добавляется поведение для защиты от спама.
  *
  * @copyright  Copyright (c) 2013 Kuponator.ru
- * @author     Yaroslav Usatikov <ys@kuponator.ru>
+ * @author     Yaroslav Usatikov <yaroslav@usatikov.com>
  */
 class ExampleModel extends CFormModel
 {

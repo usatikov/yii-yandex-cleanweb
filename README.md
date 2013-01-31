@@ -1,4 +1,4 @@
-AntiSpamBehaviour
+YandexCleanWebBehaviour
 ===============
 
 Behaivior (поведение) к моделям YII Framework для защиты от спама с помощью API Яндекса "Чистый Веб".
@@ -13,20 +13,20 @@ Behaivior (поведение) к моделям YII Framework для защит
 
 ```php
   $model = new SomeModel();
-  $model->attachBehavior('antiSpam', array(
-      'class' => 'AntiSpamBehaviour',
+  $model->attachBehavior('cleanWeb', array(
+      'class' => 'YandexCleanWebBehaviour',
       'apiKey' => '{ключ}',
   ));
 
-  if (isset($_POST['SomeModel'])) {
-     $model->attributes = $_POST['SomeModel'];
-     $model->antiSpamValues = array(
+  if (isset($_POST['ExampleModel'])) {
+     $model->attributes = $_POST['ExampleModel'];
+     $model->cleanWebValues = array(
         'body' => $model->text,
      );
      $model->validate();
   }
   else {
-     $model->initAntiSpam();
+     $model->initCleanWeb();
   }
 ```
 
