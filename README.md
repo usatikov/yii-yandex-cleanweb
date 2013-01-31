@@ -37,7 +37,7 @@ Behaivior (поведение) к моделям YII Framework для защит
 **Отображение CAPTCHA**:
 
 ```html
-<img src="<?= $model->getCaptcha() ?>" alt="Защита от спама" width="200" height="60" />
+<img src="<?php echo $model->getCaptcha(); ?>" alt="Защита от спама" width="200" height="60" />
 ```
 
 Более подробный пример можно найти в каталоге **example**.
