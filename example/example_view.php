@@ -29,10 +29,10 @@
         <?php echo $form->error($model, 'text'); ?>
     </div>
 
-    <? if ($model->getCaptcha()) : ?>
+    <?php if ($model->getCaptcha()) : ?>
 
     <div class="row">
-        <img src="<?= $model->getCaptcha() ?>" alt="Защита от спама" width="200" height="60" />
+        <img src="<?php echo $model->getCaptcha(); ?>" alt="Защита от спама" width="200" height="60" />
         <?php echo $form->labelEx($model, 'captcha'); ?>
         <?php echo $form->textField($model, 'captcha', array('size' => 60, 'maxlength' => 255)); ?>
         <?php echo $form->error($model, 'captcha'); ?>
