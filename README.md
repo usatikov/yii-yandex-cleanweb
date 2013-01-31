@@ -32,12 +32,12 @@ Behaivior (поведение) к моделям YII Framework для защит
 
 #### Представление
 
-В представлении проверять необходимость отображения CAPTCHA с помощью ($model->getCaptcha() == null).
+В представлении проверять необходимость отображения CAPTCHA с помощью *$model->isCaptchaRequired*.
 
 **Отображение CAPTCHA**:
 
 ```html
-<img src="<?php echo $model->getCaptcha(); ?>" alt="Защита от спама" width="200" height="60" />
+<img src="<?php echo $model->captchaUrl; ?>" alt="Защита от спама" width="200" height="60" />
 ```
 
 Более подробный пример можно найти в каталоге **example**.
